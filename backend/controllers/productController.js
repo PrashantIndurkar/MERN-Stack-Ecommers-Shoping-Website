@@ -19,6 +19,23 @@ exports.getAllProducts = async (req, res) => {
 	});
 };
 
+// GET Product detail
+exports.getProductDetails = async (req, res, next) => {
+	const product = await Product.findById(req.params.id);
+
+	if (!product) {
+		return res.status(500).json({
+			success: true,
+			message: 'Product not Found',
+		});
+	}
+
+	res.status(200).json({
+		success: true,
+		product,
+	});
+};
+
 // update Product --ADMIN
 exports.updateProduct = async (req, res, next) => {
 	let product = await Product.findById(req.params.id);
@@ -36,5 +53,22 @@ exports.updateProduct = async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		product,
+	});
+};
+
+// DELETE PRODUCT
+exports.deleteProduct = async (req, res, next) => {
+	const product = await Product.findById(req.params.id);
+
+	if (!product) {
+		return res.status(500).json({
+			success: false,
+		});
+	}
+	await product.remove();
+
+	res.status(200).json({
+		success: true,
+		message: 'Product Deleted successfully',
 	});
 };
